@@ -3,15 +3,16 @@
 
 #define MAP_HEIGHT		(0x0FU)		// マップ高さ
 #define MAP_WIDTH		(0xFFU)		// マップ幅
-typedef enum {
+
+enum {
 	ABOVE_GROUND,					// ステージ 1-1
 	UNDER_GROUND,					// ステージ 1-2
 	IN_THE_AIR,						// ステージ 1-3
 	INSIDE_CASTLE,					// ステージ 1-4
 	WORLD_MAX
-}E_WorldType;
+};
 
-typedef enum {
+enum {
 	NONE = 0,
 	BRICK_NORMAL,					// レンガブロック(無)
 	BRICK_COIN,						// レンガブロック(コイン)
@@ -38,6 +39,6 @@ typedef enum {
 	POLE_SEAM,						// ポールつなぎ目
 	EXIT_GATEWAY,					// ステージの出口
 	BLOCK_MAX
-}E_BlockType;
+};
 
 #endif
