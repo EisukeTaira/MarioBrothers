@@ -11,8 +11,8 @@
 // 変数
 static int world_type;
 static char world_view;
-static char* stage_name = NULL;
-static T_Stage stage[MAP_HEIGHT][MAP_WIDTH];
+static T_Stage front_stage[MAP_HEIGHT][MAP_WIDTH];
+static T_Stage back_stage[MAP_HEIGHT][MAP_WIDTH];
 static int stage_img[BLOCK_MAX];
 // 関数宣言
 static void stagectrl_stageload(int wrld);
@@ -26,8 +26,13 @@ void StageCtrl_Update(void) {
 	int i, j;
 	for (i = 0;i < MAP_HEIGHT;i++) {
 		for (j = 0;j < MAP_WIDTH;j++) {
-			stage[i][j].x = i * BLOCK_SIZE + 0x0000U;
-			stage[i][j].y = i * BLOCK_SIZE;
+			if (world_view == FRONT) {
+				front_stage[i][j].x = j * BLOCK_SIZE;
+				front_stage[i][j].y = i * BLOCK_SIZE;
+			} else {
+				back_stage[i][j].x = j * BLOCK_SIZE;
+				back_stage[i][j].y = i * BLOCK_SIZE;
+			}
 		}
 	}
 }
@@ -35,46 +40,61 @@ void StageCtrl_Draw(void) {
 	int i, j;
 	for (i = 0;i < MAP_HEIGHT;i++) {
 		for (j = 0;j < MAP_WIDTH;j++) {
-			DrawGraph(stage[i][j].x, stage[i][j].y, stage_img[stage[i][j].img], TRUE);
+			if (world_view == FRONT) {
+				DrawGraph(front_stage[i][j].x, front_stage[i][j].y, stage_img[front_stage[i][j].img], TRUE);
+			} else {
+				DrawGraph(back_stage[i][j].x, back_stage[i][j].y, stage_img[back_stage[i][j].img], TRUE);
+			}
 		}
 	}
 }
+// ステージ画像読み込み処理
+int StageCtrl_ImgLoad(void) {
+	int ret = TRUE;
+	
+	stage_img[0] = LoadGraph("images/dummy.png");
 
+	for (int i = 0; i < BLOCK_MAX; i++) {
+		if (stage_img[i] == -1) {
+			ret &= FALSE;
+		}
+	}
+	return ret;
+}
 // ステージファイル読み込み処理
 static void stagectrl_stageload(int wrld) {
-	FILE* fp = NULL;
+	FILE* fp_front = NULL;
+	FILE* fp_back = NULL;
 	int i, j;
 
 	if (wrld  == ABOVE_GROUND) {
-		char str[] = "stage/world1-1.csv";
-		stage_name = str;
+		fopen_s(&fp_front, "stage/world1-1.csv", "r");	//ステージファイルを読み込み専用で読み込む
+		fopen_s(&fp_back, "stage/world1-1b.csv", "r");	//ステージファイルを読み込み専用で読み込む
 	} else if (wrld == UNDER_GROUND) {
-		char str[] = "stage/world1-2.csv";
-		stage_name = str;
+		fopen_s(&fp_front, "stage/world1-2.csv", "r");	//ステージファイルを読み込み専用で読み込む
+		fopen_s(&fp_back, "stage/world1-2b.csv", "r");	//ステージファイルを読み込み専用で読み込む
 	} else if (wrld == IN_THE_AIR) {
-		char str[] = "stage/world1-3.csv";
-		stage_name = str;
+		fopen_s(&fp_front, "stage/world1-3.csv", "r");	//ステージファイルを読み込み専用で読み込む
+		fopen_s(&fp_back, "stage/world1-3b.csv", "r");	//ステージファイルを読み込み専用で読み込む
 	} else if (wrld == INSIDE_CASTLE) {
-		char str[] = "stage/world1-4.csv";
-		stage_name = str;
+		fopen_s(&fp_front, "stage/world1-4.csv", "r");	//ステージファイルを読み込み専用で読み込む
+		fopen_s(&fp_back, "stage/world1-4b.csv", "r");	//ステージファイルを読み込み専用で読み込む
 	} else {
-		stage_name = NULL;
+		fp_front = NULL;
+		fp_back = NULL;
 	}
 
-	if (stage_name != NULL) {
-		fopen_s(&fp, stage_name, "r");	//ステージファイルを読み込み専用で読み込む
-	}
-
-	if(fp == NULL){
+	if(fp_front == NULL || fp_back == NULL){
 		DrawFormatString(0, 0, 0xFFFFFFFF, "ファイルを開けませんでした。");
 	} else {
 		for (i = 0; i < MAP_HEIGHT; i++) {
 			for (j = 0; j < MAP_WIDTH; j++)	{
-				stage[i][j].img = fgetc(fp);
+				front_stage[i][j].img = fgetc(fp_front);
+				back_stage[i][j].img = fgetc(fp_back);
 			}
 		}
-
-		fclose(fp);							//　読み込んだファイルを閉じる
+		fclose(fp_front);							// 読み込んだファイルを閉じる
+		fclose(fp_back);							// 読み込んだファイルを閉じる
 	}
 	
 }
