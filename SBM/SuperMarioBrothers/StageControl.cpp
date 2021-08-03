@@ -89,8 +89,14 @@ static void stagectrl_stageload(int wrld) {
 	} else {
 		for (i = 0; i < MAP_HEIGHT; i++) {
 			for (j = 0; j < MAP_WIDTH; j++)	{
-				front_stage[i][j].img = fgetc(fp_front);
-				back_stage[i][j].img = fgetc(fp_back);
+				int tmp = fgetc(fp_front);
+				if ((tmp != ',') && (tmp != '\n') && (tmp != -1)) {
+					front_stage[i/2][j/2].img = tmp - '0';
+				}
+				tmp = fgetc(fp_back);
+				if ((tmp != ',') && (tmp != '\n') && (tmp != -1)) {
+					back_stage[i / 2][j / 2].img = tmp - '0';
+				}
 			}
 		}
 		fclose(fp_front);							// “Ç‚Ýž‚ñ‚¾ƒtƒ@ƒCƒ‹‚ð•Â‚¶‚é
