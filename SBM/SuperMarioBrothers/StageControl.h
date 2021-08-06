@@ -1,6 +1,8 @@
 #ifndef STAGE_CONTROL_H__
 #define STAGE_CONTROL_H__
 
+//’è”’è‹`
+
 // \‘¢‘ÌéŒ¾
 typedef struct {
 	int x;
