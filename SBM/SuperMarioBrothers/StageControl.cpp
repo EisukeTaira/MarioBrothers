@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <ctype.h>
 #include "DxLib.h"
 #include "StageControl.h"
 #include "StageControl_Config.h"
@@ -14,8 +15,11 @@ static char world_view;
 static T_Stage front_stage[MAP_HEIGHT][MAP_WIDTH];
 static T_Stage back_stage[MAP_HEIGHT][MAP_WIDTH];
 static int stage_img[BLOCK_MAX];
+static FILE* fp_front = NULL;
+static FILE* fp_back = NULL;
 // 関数宣言
 static void stagectrl_stageload(int wrld);
+static void stagectrl_world_data_check(void);
 
 void StageCtrl_Init(void) {
 	world_type = ABOVE_GROUND;
@@ -63,22 +67,22 @@ int StageCtrl_ImgLoad(void) {
 }
 // ステージファイル読み込み処理
 static void stagectrl_stageload(int wrld) {
-	FILE* fp_front = NULL;
-	FILE* fp_back = NULL;
-	int i, j;
+	
+	int i = 0, j = 0;
 
+	//ステージファイルを読み込み専用で読み込む
 	if (wrld  == ABOVE_GROUND) {
-		fopen_s(&fp_front, "stage/world1-1.csv", "r");	//ステージファイルを読み込み専用で読み込む
-		fopen_s(&fp_back, "stage/world1-1b.csv", "r");	//ステージファイルを読み込み専用で読み込む
+		fopen_s(&fp_front, "stage/world1-1.csv", "r");
+		fopen_s(&fp_back, "stage/world1-1b.csv", "r");
 	} else if (wrld == UNDER_GROUND) {
-		fopen_s(&fp_front, "stage/world1-2.csv", "r");	//ステージファイルを読み込み専用で読み込む
-		fopen_s(&fp_back, "stage/world1-2b.csv", "r");	//ステージファイルを読み込み専用で読み込む
+		fopen_s(&fp_front, "stage/world1-2.csv", "r");
+		fopen_s(&fp_back, "stage/world1-2b.csv", "r");
 	} else if (wrld == IN_THE_AIR) {
-		fopen_s(&fp_front, "stage/world1-3.csv", "r");	//ステージファイルを読み込み専用で読み込む
-		fopen_s(&fp_back, "stage/world1-3b.csv", "r");	//ステージファイルを読み込み専用で読み込む
+		fopen_s(&fp_front, "stage/world1-3.csv", "r");
+		fopen_s(&fp_back, "stage/world1-3b.csv", "r");
 	} else if (wrld == INSIDE_CASTLE) {
-		fopen_s(&fp_front, "stage/world1-4.csv", "r");	//ステージファイルを読み込み専用で読み込む
-		fopen_s(&fp_back, "stage/world1-4b.csv", "r");	//ステージファイルを読み込み専用で読み込む
+		fopen_s(&fp_front, "stage/world1-4.csv", "r");
+		fopen_s(&fp_back, "stage/world1-4b.csv", "r");
 	} else {
 		fp_front = NULL;
 		fp_back = NULL;
@@ -87,21 +91,60 @@ static void stagectrl_stageload(int wrld) {
 	if(fp_front == NULL || fp_back == NULL){
 		DrawFormatString(0, 0, 0xFFFFFFFF, "ファイルを開けませんでした。");
 	} else {
-		for (i = 0; i < MAP_HEIGHT; i++) {
-			for (j = 0; j < MAP_WIDTH; j++)	{
-				int tmp = fgetc(fp_front);
-				if ((tmp != ',') && (tmp != '\n') && (tmp != -1)) {
-					front_stage[i/2][j/2].img = tmp - '0';
-				}
-				tmp = fgetc(fp_back);
-				if ((tmp != ',') && (tmp != '\n') && (tmp != -1)) {
-					back_stage[i / 2][j / 2].img = tmp - '0';
-				}
-			}
-		}
+		stagectrl_world_data_check();
 		fclose(fp_front);							// 読み込んだファイルを閉じる
 		fclose(fp_back);							// 読み込んだファイルを閉じる
 	}
 	
 }
+// 読み込みデータチェック
+static void stagectrl_world_data_check(void) {
+	int digit[3] = {}, d = 0;		// 桁数管理
+	int chr = NULL;					// 出力文字
+	int i = 0, j = 0;				// ループカウンタ
 
+	// 表面のデータチェック
+	do {
+		chr = fgetc(fp_front);
+		if (isdigit(chr)) {
+			digit[d++] = (chr - '0');
+		} else if (chr == ',') {
+			int kt = 1;
+			for (d -= 1;d >= 0;d--) {
+				front_stage[i][j].img += (digit[d] * kt);
+				kt *= 10;
+			}
+			digit[0] = 0;
+			digit[1] = 0;
+			digit[2] = 0;
+			d = 0;
+			if (++j >= MAP_WIDTH) {
+				j = 0;
+				i++;
+			}
+		}
+	} while (chr != EOF);
+	i = j = 0;
+	// 裏面のデータチェック
+	do {
+		chr = fgetc(fp_back);
+		if (isdigit(chr)) {
+			digit[d++] = (chr - '0');
+		}
+		else if (chr == ',') {
+			int kt = 1;
+			for (d -= 1;d >= 0;d--) {
+				back_stage[i][j].img += (digit[d] * kt);
+				kt *= 10;
+			}
+			digit[0] = 0;
+			digit[1] = 0;
+			digit[2] = 0;
+			d = 0;
+			if (++j >= MAP_WIDTH) {
+				j = 0;
+				i++;
+			}
+		}
+	} while (chr != EOF);
+}
