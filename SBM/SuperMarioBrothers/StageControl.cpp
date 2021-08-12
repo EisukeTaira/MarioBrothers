@@ -9,11 +9,9 @@
 
 // 変数
 static int world_type;
-static T_Stage front_stage[MAP_HEIGHT][MAP_WIDTH];
-static T_Stage back_stage[MAP_HEIGHT][MAP_WIDTH];
+static T_Stage stage[MAP_HEIGHT][MAP_WIDTH];
 static int stage_img[BLOCK_MAX];
 static FILE* fp_front = NULL;
-static FILE* fp_back = NULL;
 // 関数宣言
 static void stagectrl_stageload(void);
 static const char* get_csv_name(void);
@@ -30,8 +28,8 @@ void StageCtrl_Update(void) {
 	int i, j;
 	for (i = 0;i < MAP_HEIGHT;i++) {
 		for (j = 0;j < MAP_WIDTH;j++) {
-			front_stage[i][j].x = j * BLOCK_SIZE;
-			front_stage[i][j].y = i * BLOCK_SIZE;
+			stage[i][j].x = j * BLOCK_SIZE;
+			stage[i][j].y = i * BLOCK_SIZE;
 		}
 	}
 }
@@ -40,7 +38,7 @@ void StageCtrl_Draw(void) {
 	int i, j;
 	for (i = 0;i < MAP_HEIGHT;i++) {
 		for (j = 0;j < MAP_WIDTH;j++) {
-			DrawGraph(front_stage[i][j].x, front_stage[i][j].y, stage_img[front_stage[i][j].img], TRUE);
+			DrawGraph(stage[i][j].x, stage[i][j].y, stage_img[stage[i][j].img], TRUE);
 		}
 	}
 }
@@ -64,6 +62,7 @@ int StageCtrl_ImgLoad(void) {
 // ステージ切り替え処理
 void StageCtrl_MapChange(int wrld) {
 	world_type = wrld;
+	stagectrl_stageload();
 }
 // ステージファイル読み込み処理
 static void stagectrl_stageload(void) {
@@ -105,7 +104,7 @@ static void stagectrl_world_data_check(void) {
 		if (chr == ',' || chr == '\n') {
 			int kt = 1;
 			for (d = d - 1;d >= 0;d--) {
-				front_stage[i][j].img += (digit[d] * kt);
+				stage[i][j].img += (digit[d] * kt);
 				kt *= 10;
 			}
 			for (d = 0;d < 2;d++) {
