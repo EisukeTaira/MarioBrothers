@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "DxLib.h"
-#include "StageControl.h"
-#include "StageControl_Config.h"
+#include "StageCtrl.h"
+#include "StageCtrl_Config.h"
 
 //“à•”’è”
 #define BLOCK_SIZE	(32U)
