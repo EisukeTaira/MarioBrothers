@@ -1,3 +1,4 @@
+#include "GimmickCtrl.h"
 
 void GimmickCtrl_Init(void) {
 
