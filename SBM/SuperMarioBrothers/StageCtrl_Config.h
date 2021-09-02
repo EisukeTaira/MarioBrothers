@@ -20,18 +20,23 @@ enum {
 
 // 各ブロック
 enum {
-	NONE = 0,								// 割り当て無し
+	SKY = 0,								// 割り当て無し
 	FLOOR,									// 床
 	HATENA,									// ハテナ
 	COIN = HATENA + ANIM_SIZE,				// コイン
 	BRICK = COIN + ANIM_SIZE,				// レンガ
 	STAIRS,									// 階段
-	BLINK_,									// 空ブロック
+	BLINK,									// 空ブロック
 	ZHUGE_LIANG,							// 孔明
+	POLE_HEAD,								// ポールの先頭
+	POLE_DOWN,								// ポールの支柱
+	POLE_FLAG,								// ポールの旗
 	VARTCAL_CPIPE,							// 縦向き土管
 	SIDEWAY_CPIPE = VARTCAL_CPIPE + 4,		// 横向き土管
 	PIPE_JOINT = SIDEWAY_CPIPE + 4,			// 土管つなぎ目
-	MAGMA = PIPE_JOINT + 2,					// マグマ
+	GLASS = PIPE_JOINT + 2,					// 草
+	MOUNTAIN = GLASS + 3,					// 山
+	MAGMA = MOUNTAIN + 6,					// マグマ
 	SLIDING_THROUGH,						// すり抜けブロック
 	PILLAR = SLIDING_THROUGH + 3,			// 柱
 	BLOCK_MAX
