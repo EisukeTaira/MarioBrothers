@@ -45,12 +45,17 @@ void StageCtrl_Draw(void) {
 // ステージ画像読み込み処理
 int StageCtrl_ImgLoad(void) {
 	int ret = 0;
-	
-	stage_img[NONE] = LoadGraph("images/dummy.png");
+	for (int i = 0; i < BLOCK_MAX; i++) {
+		stage_img[i] = 0;
+	}
+	stage_img[NONE] = LoadGraph("images/sora.png");
 	stage_img[FLOOR] = LoadGraph("images/floor.png");
-	ret += LoadDivGraph("images/hatena.png", 4, 4, 1, 32, 32, &stage_img[HATENA]);
+	ret = LoadDivGraph("images/hatena.png", 4, 4, 1, 32, 32, &stage_img[HATENA]);
 
-
+	if (ret == -1) {
+		return -1;
+	}
+		 
 	for (int i = 0; i < BLOCK_MAX; i++) {
 		if (stage_img[i] == -1) {
 			ret = -1;

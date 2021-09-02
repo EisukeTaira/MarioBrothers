@@ -11,6 +11,8 @@ typedef enum {
 void SceneMgr_Initialize(void);
 void SceneMgr_Update(void);
 void SceneMgr_Draw(void);
-void SceneMgr_SceneChange(E_Scene es);
+void SceneMgr_SceneChange(int es);
+int SceneMgr_ImgCheck(void);
+
 
 #endif // !SCENE_MANEGER_H__

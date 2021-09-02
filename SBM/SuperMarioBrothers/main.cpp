@@ -10,7 +10,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 	SetDrawScreen(DX_SCREEN_BACK);
 	SetGraphMode(640, 480, 30);
-
+	if (SceneMgr_ImgCheck() == -1) {
+		return -1;
+	}
 	SceneMgr_Initialize();			// èâä˙âª
 
 	while (ScreenFlip() == 0 && ProcessMessage() == 0 && ClearDrawScreen() == 0){
