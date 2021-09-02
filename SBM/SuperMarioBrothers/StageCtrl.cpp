@@ -31,7 +31,7 @@ void StageCtrl_Update(void) {
 	int i, j;
 	for (i = 0;i < MAP_HEIGHT;i++) {
 		for (j = 0;j < MAP_WIDTH;j++) {
-			stage[i][j].x = j * BLOCK_SIZE - (BLOCK_SIZE * 15 * 5);
+			stage[i][j].x = j * BLOCK_SIZE;/*(BLOCK_SIZE * 15 * 5) */
 			stage[i][j].y = i * BLOCK_SIZE;
 		}
 	}

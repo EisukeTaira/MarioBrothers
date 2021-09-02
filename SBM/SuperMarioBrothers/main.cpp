@@ -17,8 +17,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 	SceneMgr_Initialize();			// 初期化
 
 	// TEMP:　マリオを歩かせるための暫定処理
-	T_MARIO player;
-	if (!(isInitSuccess(player))) return 0;
+	//T_MARIO player;
+	//if (!(isInitSuccess(player))) return 0;
 	// TEMP:　ここまで
 
 	while (ScreenFlip() == 0 && ProcessMessage() == 0 && ClearDrawScreen() == 0){
@@ -26,8 +26,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 		SceneMgr_Draw();		// 描画
 
 		// TEMP:　マリオを歩かせるための暫定処理
-		Update(player);
-		Draw(player);
+		/*Update(player);
+		Draw(player);*/
 		// TEMP:　ここまで
 	}
 

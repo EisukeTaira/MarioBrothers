@@ -1,7 +1,7 @@
 #ifndef KEY_CONTROL_H__
 #define KEY_CONTROL_H__
 
-#define INPUT_KEY_MAX (0xFFU)
+#define INPUT_KEY_MAX (0x100U)
 
 typedef struct {
 	int old_key;

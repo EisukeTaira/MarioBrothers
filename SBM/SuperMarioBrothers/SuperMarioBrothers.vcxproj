@@ -154,13 +154,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GimmickCtrl.cpp" />
+    <ClCompile Include="KeyControl.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mario.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="StageCtrl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnemyConfig.h" />
     <ClInclude Include="GimmickCtrl.h" />
+    <ClInclude Include="KeyControl.h" />
+    <ClInclude Include="Mario.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="StageCtrl.h" />
     <ClInclude Include="StageCtrl_Config.h" />
