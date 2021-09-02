@@ -159,6 +159,7 @@
     <ClCompile Include="StageCtrl.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EnemyConfig.h" />
     <ClInclude Include="GimmickCtrl.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="StageCtrl.h" />

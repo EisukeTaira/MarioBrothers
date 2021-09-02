@@ -18,5 +18,5 @@ void StageCtrl_Update(void);		// ステージ制御：更新処理
 void StageCtrl_Draw(void);			// ステージ制御：描画処理
 int StageCtrl_ImgLoad(void);		// ステージ制御：画像読み込み処理
 void StageCtrl_MapChange(int wrld);		// ステージ制御：ステージ変更処理
-
+int Get_StageCtrl_world_type(void);
 #endif // !STAGE_CONTROL_H__

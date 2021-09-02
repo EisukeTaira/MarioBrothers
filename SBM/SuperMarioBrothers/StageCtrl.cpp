@@ -64,6 +64,9 @@ void StageCtrl_MapChange(int wrld) {
 	world_type = wrld;
 	stagectrl_stageload();
 }
+int Get_StageCtrl_world_type(void) {
+	return world_type;
+}
 // ステージファイル読み込み処理
 static void stagectrl_stageload(void) {
 	
