@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "KeyControl.h"
 #include "GimmickCtrl.h"
 #include "StageCtrl.h"
 
@@ -12,6 +13,7 @@ void SceneMgr_Initialize(void) {
 }
 // çXêV
 void SceneMgr_Update(void) {
+	KeyCtrl_Update();
 	switch (scene_mode) {
 		case TITLE:
 			break;

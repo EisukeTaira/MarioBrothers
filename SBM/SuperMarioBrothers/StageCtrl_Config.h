@@ -34,9 +34,10 @@ enum {
 	VARTCAL_CPIPE,							// 縦向き土管
 	SIDEWAY_CPIPE = VARTCAL_CPIPE + 4,		// 横向き土管
 	PIPE_JOINT = SIDEWAY_CPIPE + 4,			// 土管つなぎ目
-	GLASS = PIPE_JOINT + 2,					// 草
-	MOUNTAIN = GLASS + 3,					// 山
-	MAGMA = MOUNTAIN + 6,					// マグマ
+	GLASS = PIPE_JOINT + 2,					// 草(風景)
+	MOUNTAIN = GLASS + 3,					// 山(風景)
+	CLOUD = MOUNTAIN + 6,					// 雲(風景)
+	MAGMA = CLOUD + 1,						// マグマ
 	SLIDING_THROUGH,						// すり抜けブロック
 	PILLAR = SLIDING_THROUGH + 3,			// 柱
 	BLOCK_MAX
