@@ -22,11 +22,17 @@ enum {
 enum {
 	SKY = 0,								// 割り当て無し
 	FLOOR,									// 床
+	FLOOR_UNDER,							// 床(地下)
 	HATENA,									// ハテナ
+	HATENA_UNDER,							// ハテナ(地下)
 	COIN = HATENA + ANIM_SIZE,				// コイン
-	BRICK = COIN + ANIM_SIZE,				// レンガ
+	COIN_UNDER = COIN + ANIM_SIZE,			// コイン(地下)
+	BRICK = COIN_UNDER + ANIM_SIZE,			// レンガ
+	BRICK_UNDER,							// レンガ(地下)
 	STAIRS,									// 階段
+	STAIRS_UNDER,							// 階段(地下)
 	BLINK,									// 空ブロック
+	BLINK_UNDER,							// 空ブロック(地下)
 	ZHUGE_LIANG,							// 孔明
 	POLE_HEAD,								// ポールの先頭
 	POLE_DOWN,								// ポールの支柱
@@ -37,7 +43,7 @@ enum {
 	GLASS = PIPE_JOINT + 2,					// 草(風景)
 	MOUNTAIN = GLASS + 3,					// 山(風景)
 	CLOUD = MOUNTAIN + 6,					// 雲(風景)
-	MAGMA = CLOUD + 1,						// マグマ
+	MAGMA = CLOUD + 6,						// マグマ
 	SLIDING_THROUGH,						// すり抜けブロック
 	PILLAR = SLIDING_THROUGH + 3,			// 柱
 	BLOCK_MAX

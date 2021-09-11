@@ -28,7 +28,7 @@ static void dummy_func(void);
 // 初期化
 void StageCtrl_Init(void) {
 	dmy_input_x = 0;
-	StageCtrl_MapChange(ABOVE_BACK);
+	StageCtrl_MapChange(UNDER_GROUND);
 	stagectrl_stageload();
 }
 // 更新
@@ -49,7 +49,14 @@ void StageCtrl_Draw(void) {
 	int i, j;
 	for (i = 0;i < MAP_HEIGHT;i++) {
 		for (j = 0;j < MAP_WIDTH;j++) {
-			DrawGraph(stage[i][j].x, stage[i][j].y, stage_img[stage[i][j].img], TRUE);
+			if ((world_type == ABOVE_GROUND) || (world_type == UNDER_START) ||
+				(world_type == UNDER_GOAL) || (world_type == IN_THE_AIR)) {
+				DrawGraph(stage[i][j].x, stage[i][j].y, stage_img[SKY], TRUE);
+			}
+			if (stage[i][j].img != SKY) {
+				DrawGraph(stage[i][j].x, stage[i][j].y, stage_img[stage[i][j].img], TRUE);
+			}
+			
 		}
 	}
 }
@@ -62,14 +69,19 @@ int StageCtrl_ImgLoad(void) {
 		stage_img[i] = 0;
 	}
 
-	stage_img[SKY] = LoadGraph("images/sora.png");									// 何もない所
-	stage_img[FLOOR] = LoadGraph("images/floor.png");								// 床
-	ret = LoadDivGraph("images/hatena.png", 4, 4, 1, 32, 32, &stage_img[HATENA]);	// ハテナブロック
-	ret = LoadDivGraph("images/coin.png", 4, 4, 1, 32, 32, &stage_img[COIN]);		// コイン
-	stage_img[BRICK] = LoadGraph("images/block.png");								// レンガ
-	stage_img[STAIRS] = LoadGraph("images/kai_block.png");							// 階段
-	stage_img[BLINK] = LoadGraph("images/kara_block.png");							// 空ブロック
-	stage_img[ZHUGE_LIANG] = LoadGraph("images/sora.png");							// 孔明
+	stage_img[SKY] = LoadGraph("images/sora.png");																// 何もない所
+	stage_img[FLOOR] = LoadGraph("images/floor.png");															// 床
+	stage_img[FLOOR_UNDER] = LoadGraph("images/underground/tika_floor.png");									// 床
+	ret = LoadDivGraph("images/hatena.png", 4, 4, 1, 32, 32, &stage_img[HATENA]);								// ハテナブロック
+	ret = LoadDivGraph("images/underground/tika_hatenablock.png", 4, 4, 1, 32, 32, &stage_img[HATENA_UNDER]);	// ハテナブロック
+	ret = LoadDivGraph("images/coin.png", 4, 4, 1, 32, 32, &stage_img[COIN]);									// コイン
+	ret = LoadDivGraph("images/underground/mukidasitika_coin.png", 4, 4, 1, 32, 32, &stage_img[COIN_UNDER]);					// コイン
+	stage_img[BRICK] = LoadGraph("images/block.png");															// レンガ
+	stage_img[BRICK_UNDER] = LoadGraph("images/underground/tika_block.png");									// レンガ
+	stage_img[STAIRS] = LoadGraph("images/kai_block.png");														// 階段
+	stage_img[STAIRS_UNDER] = LoadGraph("images/underground/tika_kaibloak.png");								// 階段
+	stage_img[BLINK] = LoadGraph("images/kara_block.png");														// 空ブロック
+	stage_img[ZHUGE_LIANG] = LoadGraph("images/sora.png");														// 孔明
 
 	// ゴールポール
 	stage_img[POLE_HEAD] = LoadGraph("images/pole.png");
@@ -101,18 +113,26 @@ int StageCtrl_ImgLoad(void) {
 	stage_img[MOUNTAIN + 4] = LoadGraph("images/mountain_surface1.png");
 	stage_img[MOUNTAIN + 5] = LoadGraph("images/mountain_surface2.png");
 
+	// 背景・雲
+	stage_img[CLOUD] = LoadGraph("images/kumo_leftup.png");
+	stage_img[CLOUD + 1] = LoadGraph("images/kumo_centerup.png");
+	stage_img[CLOUD + 2] = LoadGraph("images/kumo_rightup.png");
+	stage_img[CLOUD + 3] = LoadGraph("images/kumo_leftdown.png");
+	stage_img[CLOUD + 4] = LoadGraph("images/kumo_centerdown.png");
+	stage_img[CLOUD + 5] = LoadGraph("images/kumo_rightdown.png");
+
 	// 城内用マグマ
 	stage_img[MAGMA] = LoadGraph("images/sora.png");
 
 	// 1-3ワールド用
-	stage_img[SLIDING_THROUGH] = LoadGraph("images/sora.png");
-	stage_img[SLIDING_THROUGH + 1] = LoadGraph("images/sora.png");
-	stage_img[SLIDING_THROUGH + 2] = LoadGraph("images/sora.png");
-	stage_img[PILLAR] = LoadGraph("images/sora.png");
+	stage_img[SLIDING_THROUGH] = LoadGraph("images/1-3ki_left.png");
+	stage_img[SLIDING_THROUGH + 1] = LoadGraph("images/1-3ki_center.png");
+	stage_img[SLIDING_THROUGH + 2] = LoadGraph("images/1-3ki_right.png");
+	stage_img[PILLAR] = LoadGraph("images/1-3eda.png");
 
 	for (int i = 0;i < BLOCK_MAX;i++) {
 		if (stage_img[i] == LOAD_ERROR) {
-			ret = -1;
+			ret = LOAD_ERROR;
 		}
 	}
 	return ret;
@@ -186,7 +206,7 @@ static void stagectrl_world_data_check(void) {
 static void dummy_func(void) {
 	
 	if (Get_Key().now_key & PAD_INPUT_LEFT) {
-		dmy_input_x += 4;
+		dmy_input_x += 16;
 	}
 	if (Get_Key().now_key & PAD_INPUT_RIGHT) {
 		dmy_input_x -= 4;
