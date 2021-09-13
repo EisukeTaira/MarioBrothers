@@ -28,7 +28,7 @@ static void dummy_func(void);
 // 初期化
 void StageCtrl_Init(void) {
 	dmy_input_x = 0;
-	StageCtrl_MapChange(UNDER_GROUND);
+	StageCtrl_MapChange(INSIDE_CASTLE);
 	stagectrl_stageload();
 }
 // 更新
@@ -49,14 +49,14 @@ void StageCtrl_Draw(void) {
 	int i, j;
 	for (i = 0;i < MAP_HEIGHT;i++) {
 		for (j = 0;j < MAP_WIDTH;j++) {
-			if ((world_type == ABOVE_GROUND) || (world_type == UNDER_START) ||
+			/*if ((world_type == ABOVE_GROUND) || (world_type == UNDER_START) ||
 				(world_type == UNDER_GOAL) || (world_type == IN_THE_AIR)) {
 				DrawGraph(stage[i][j].x, stage[i][j].y, stage_img[SKY], TRUE);
 			}
 			if (stage[i][j].img != SKY) {
 				DrawGraph(stage[i][j].x, stage[i][j].y, stage_img[stage[i][j].img], TRUE);
-			}
-			
+			}*/
+			DrawGraph(stage[i][j].x, stage[i][j].y, stage_img[stage[i][j].img], TRUE);
 		}
 	}
 }
@@ -121,8 +121,11 @@ int StageCtrl_ImgLoad(void) {
 	stage_img[CLOUD + 4] = LoadGraph("images/kumo_centerdown.png");
 	stage_img[CLOUD + 5] = LoadGraph("images/kumo_rightdown.png");
 
-	// 城内用マグマ
-	stage_img[MAGMA] = LoadGraph("images/sora.png");
+	// 1-4ワールド用
+	stage_img[MAGMA] = LoadGraph("images/maguma_up.png");
+	stage_img[MAGMA + 1] = LoadGraph("images/maguma_down.png");
+	stage_img[CASTLE_WALL] = LoadGraph("images/kabe.png");
+	stage_img[BRIDGE] = LoadGraph("images/yuka1-4.png");
 
 	// 1-3ワールド用
 	stage_img[SLIDING_THROUGH] = LoadGraph("images/1-3ki_left.png");
@@ -206,10 +209,10 @@ static void stagectrl_world_data_check(void) {
 static void dummy_func(void) {
 	
 	if (Get_Key().now_key & PAD_INPUT_LEFT) {
-		dmy_input_x += 16;
+		dmy_input_x += 4;
 	}
 	if (Get_Key().now_key & PAD_INPUT_RIGHT) {
-		dmy_input_x -= 4;
+		dmy_input_x -= 16;
 	}
 
 }

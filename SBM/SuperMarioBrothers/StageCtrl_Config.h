@@ -43,7 +43,10 @@ enum {
 	GLASS = PIPE_JOINT + 2,					// 草(風景)
 	MOUNTAIN = GLASS + 3,					// 山(風景)
 	CLOUD = MOUNTAIN + 6,					// 雲(風景)
-	MAGMA = CLOUD + 6,						// マグマ
+	MISSING = CLOUD + 6,					// 
+	MAGMA,
+	CASTLE_WALL = MAGMA + 2,				// マグマ
+	BRIDGE,									// マグマ
 	SLIDING_THROUGH,						// すり抜けブロック
 	PILLAR = SLIDING_THROUGH + 3,			// 柱
 	BLOCK_MAX
