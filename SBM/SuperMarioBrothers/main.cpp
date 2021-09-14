@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "SceneManager.h"
 #include "Mario.h"
+#include "title.h"
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 {
@@ -13,19 +14,23 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 	SetGraphMode(640, 480, 30);
 
 	SceneMgr_Initialize();			// 初期化
-
+	Title_Init();
 	// TEMP:　マリオを歩かせるための暫定処理
-	T_MARIO player;
-	if (!(isInitSuccess(player))) return 0;
+	/*T_MARIO player;
+	if (!(isInitSuccess(player))) return 0;*/
 	// TEMP:　ここまで
 
 	while (ScreenFlip() == 0 && ProcessMessage() == 0 && ClearDrawScreen() == 0){
 		SceneMgr_Update();		// 更新
 		SceneMgr_Draw();		// 描画
 
+		//タイトルの処理
+		Title_Update();
+		Title_Draw();
+
 		// TEMP:　マリオを歩かせるための暫定処理
-		Update(player);
-		Draw(player);
+		/*Update(player);
+		Draw(player);*/
 		// TEMP:　ここまで
 	}
 
