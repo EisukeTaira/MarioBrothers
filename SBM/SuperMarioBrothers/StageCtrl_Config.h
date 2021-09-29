@@ -1,9 +1,40 @@
 #ifndef STAGE_CONTROL_CONFIG_H__
 #define STAGE_CONTROL_CONFIG_H__
 
-#define MAP_HEIGHT		(0x0FU)		// マップ高さ
-#define MAP_WIDTH		(0xFFU)		// マップ幅
-#define ANIM_SIZE		(0x04U)		// アニメーションサイズ
+#define MAP_HEIGHT			(0x0FU)						// マップ高さ
+#define MAP_WIDTH			(0xFFU)						// マップ幅
+#define BLOCK_SIZE			(32U)						// ブロックサイズ
+#define ANIM_SIZE			(4U)						// アニメーションサイズ
+
+#define SKY					(0U)						// 割り当て無し
+#define FLOOR				(1U)						// 床
+#define FLOOR_UNDER			(2U)						// 床(地下)
+#define HATENA				(3U)						// ハテナ
+#define HATENA_UNDER		(7U)						// ハテナ(地下)
+#define COIN				(11U)						// コイン
+#define COIN_UNDER			(15U)						// コイン(地下)
+#define BRICK				(19U)						// レンガ
+#define BRICK_UNDER			(20U)						// レンガ(地下)
+#define STAIRS				(21U)						// 階段
+#define STAIRS_UNDER		(22U)						// 階段(地下)
+#define BLINK				(23U)						// 空ブロック
+#define BLINK_UNDER			(24U)						// 空ブロック(地下)
+#define ZHUGE_LIANG			(25U)						// 孔明
+#define POLE_HEAD			(26U)						// ポールの先頭
+#define POLE_DOWN			(27U)						// ポールの支柱
+#define POLE_FLAG			(28U)						// ポールの旗
+#define VARTCAL_CPIPE		(29U)						// 縦向き土管
+#define SIDEWAY_CPIPE		(33U)						// 横向き土管
+#define PIPE_JOINT			(37U)						// 土管つなぎ目
+#define GLASS				(39U)						// 草(風景)
+#define MOUNTAIN			(42U)						// 山(風景)
+#define CLOUD				(48U)						// 雲(風景)
+#define BRIDGE				(56U)						// 桟橋
+#define MAGMA				(57U)						// マグマ
+#define CASTLE_WALL			(59U)						// 壁・地面
+#define SLIDING_THROUGH		(60U)						// すり抜けブロック
+#define PILLAR				(63U)						// 柱
+#define BLOCK_MAX			(64U)
 
 // ワールド情報
 enum {
@@ -18,39 +49,6 @@ enum {
 	WORLD_MAX
 };
 
-// 各ブロック
-enum {
-	SKY = 0,								// 割り当て無し
-	FLOOR,									// 床
-	FLOOR_UNDER,							// 床(地下)
-	HATENA,									// ハテナ
-	HATENA_UNDER,							// ハテナ(地下)
-	COIN = HATENA + ANIM_SIZE,				// コイン
-	COIN_UNDER = COIN + ANIM_SIZE,			// コイン(地下)
-	BRICK = COIN_UNDER + ANIM_SIZE,			// レンガ
-	BRICK_UNDER,							// レンガ(地下)
-	STAIRS,									// 階段
-	STAIRS_UNDER,							// 階段(地下)
-	BLINK,									// 空ブロック
-	BLINK_UNDER,							// 空ブロック(地下)
-	ZHUGE_LIANG,							// 孔明
-	POLE_HEAD,								// ポールの先頭
-	POLE_DOWN,								// ポールの支柱
-	POLE_FLAG,								// ポールの旗
-	VARTCAL_CPIPE,							// 縦向き土管
-	SIDEWAY_CPIPE = VARTCAL_CPIPE + 4,		// 横向き土管
-	PIPE_JOINT = SIDEWAY_CPIPE + 4,			// 土管つなぎ目
-	GLASS = PIPE_JOINT + 2,					// 草(風景)
-	MOUNTAIN = GLASS + 3,					// 山(風景)
-	CLOUD = MOUNTAIN + 6,					// 雲(風景)
-	MISSING = CLOUD + 6,					// 
-	MAGMA,
-	CASTLE_WALL = MAGMA + 2,				// マグマ
-	BRIDGE,									// マグマ
-	SLIDING_THROUGH,						// すり抜けブロック
-	PILLAR = SLIDING_THROUGH + 3,			// 柱
-	BLOCK_MAX
-};
 
 const char C_StageName[][25] = {
 	"stage/world1-1.csv",

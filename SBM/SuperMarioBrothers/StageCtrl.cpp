@@ -6,11 +6,18 @@
 #include "KeyControl.h"
 
 //内部定数
-#define BLOCK_SIZE	(32U)
-#define LOAD_ERROR	(-1)
 #define	CHR_ZERO	('0')
 #define	CHR_COMMA	(',')
 #define	CHR_NL		('\n')
+
+// 構造体宣言
+typedef struct {
+	int x;
+	int y;
+	int img;
+	int inside;
+}T_Stage;
+
 // 変数
 static int world_type;
 static T_Stage stage[MAP_HEIGHT][MAP_WIDTH];
@@ -27,7 +34,16 @@ static void dummy_func(void);
 
 // 初期化
 void StageCtrl_Init(void) {
+	int i, j;
 	dmy_input_x = 0;
+	for (i = 0;i < MAP_HEIGHT;i++) {
+		for (j = 0;j < MAP_WIDTH;j++) {
+			stage[i][j].x = 0;
+			stage[i][j].y = 0;
+			stage[i][j].img = 0;
+			stage[i][j].inside = 0;
+		}
+	}
 	StageCtrl_MapChange(INSIDE_CASTLE);
 	stagectrl_stageload();
 }
@@ -56,9 +72,11 @@ void StageCtrl_Draw(void) {
 			if (stage[i][j].img != SKY) {
 				DrawGraph(stage[i][j].x, stage[i][j].y, stage_img[stage[i][j].img], TRUE);
 			}*/
-			DrawGraph(stage[i][j].x, stage[i][j].y, stage_img[stage[i][j].img], TRUE);
+			DrawFormatString(stage[i][j].x, stage[i][j].y, 0x0000FFFF, "%d", stage[i][j].img);
+			//DrawGraph(stage[i][j].x, stage[i][j].y, stage_img[stage[i][j].img], TRUE);
 		}
 	}
+	
 }
 // ステージ画像読み込み処理
 int StageCtrl_ImgLoad(void) {
@@ -69,19 +87,22 @@ int StageCtrl_ImgLoad(void) {
 		stage_img[i] = 0;
 	}
 
+	// 地上
 	stage_img[SKY] = LoadGraph("images/sora.png");																// 何もない所
 	stage_img[FLOOR] = LoadGraph("images/floor.png");															// 床
-	stage_img[FLOOR_UNDER] = LoadGraph("images/underground/tika_floor.png");									// 床
 	ret = LoadDivGraph("images/hatena.png", 4, 4, 1, 32, 32, &stage_img[HATENA]);								// ハテナブロック
-	ret = LoadDivGraph("images/underground/tika_hatenablock.png", 4, 4, 1, 32, 32, &stage_img[HATENA_UNDER]);	// ハテナブロック
 	ret = LoadDivGraph("images/coin.png", 4, 4, 1, 32, 32, &stage_img[COIN]);									// コイン
-	ret = LoadDivGraph("images/underground/mukidasitika_coin.png", 4, 4, 1, 32, 32, &stage_img[COIN_UNDER]);					// コイン
 	stage_img[BRICK] = LoadGraph("images/block.png");															// レンガ
-	stage_img[BRICK_UNDER] = LoadGraph("images/underground/tika_block.png");									// レンガ
 	stage_img[STAIRS] = LoadGraph("images/kai_block.png");														// 階段
-	stage_img[STAIRS_UNDER] = LoadGraph("images/underground/tika_kaibloak.png");								// 階段
 	stage_img[BLINK] = LoadGraph("images/kara_block.png");														// 空ブロック
 	stage_img[ZHUGE_LIANG] = LoadGraph("images/sora.png");														// 孔明
+	
+	// 地下
+	stage_img[FLOOR_UNDER] = LoadGraph("images/underground/tika_floor.png");									// 床
+	ret = LoadDivGraph("images/underground/tika_hatenablock.png", 4, 4, 1, 32, 32, &stage_img[HATENA_UNDER]);	// ハテナブロック
+	ret = LoadDivGraph("images/underground/mukidasitika_coin.png", 4, 4, 1, 32, 32, &stage_img[COIN_UNDER]);	// コイン
+	stage_img[BRICK_UNDER] = LoadGraph("images/underground/tika_block.png");									// レンガ
+	stage_img[STAIRS_UNDER] = LoadGraph("images/underground/tika_kaibloak.png");								// 階段
 
 	// ゴールポール
 	stage_img[POLE_HEAD] = LoadGraph("images/pole.png");
@@ -122,16 +143,16 @@ int StageCtrl_ImgLoad(void) {
 	stage_img[CLOUD + 5] = LoadGraph("images/kumo_rightdown.png");
 
 	// 1-4ワールド用
+	stage_img[BRIDGE] = LoadGraph("images/yuka1-4.png");
 	stage_img[MAGMA] = LoadGraph("images/maguma_up.png");
 	stage_img[MAGMA + 1] = LoadGraph("images/maguma_down.png");
 	stage_img[CASTLE_WALL] = LoadGraph("images/kabe.png");
-	stage_img[BRIDGE] = LoadGraph("images/yuka1-4.png");
 
 	// 1-3ワールド用
-	stage_img[SLIDING_THROUGH] = LoadGraph("images/1-3ki_left.png");
+	/*stage_img[SLIDING_THROUGH] = LoadGraph("images/1-3ki_left.png");
 	stage_img[SLIDING_THROUGH + 1] = LoadGraph("images/1-3ki_center.png");
 	stage_img[SLIDING_THROUGH + 2] = LoadGraph("images/1-3ki_right.png");
-	stage_img[PILLAR] = LoadGraph("images/1-3eda.png");
+	stage_img[PILLAR] = LoadGraph("images/1-3eda.png");*/
 
 	for (int i = 0;i < BLOCK_MAX;i++) {
 		if (stage_img[i] == LOAD_ERROR) {
@@ -156,7 +177,7 @@ static void stagectrl_stageload(void) {
 	fopen_s(&fp_front, get_csv_name(), "r");
 
 	if(fp_front == NULL){
-		DrawFormatString(0, 0, 0xFFFFFFFF, "ファイルを開けませんでした。");
+		DrawFormatString(0, 0, 0x00000000, "ファイルを開けませんでした。");
 	} else {
 		stagectrl_world_data_check();
 		fclose(fp_front);							// 読み込んだファイルを閉じる
@@ -186,9 +207,8 @@ static void stagectrl_world_data_check(void) {
 			break;
 		}
 		if (isdigit(chr)) {
-			if (digit_flg) {
-				stage[i][j].img *= 10;
-				stage[i][j].img += (chr - CHR_ZERO);
+			if (digit_flg == TRUE) {
+				stage[i][j].img = stage[i][j].img * 10 + (chr - CHR_ZERO);
 			} else {
 				stage[i][j].img = (chr - CHR_ZERO);
 			}

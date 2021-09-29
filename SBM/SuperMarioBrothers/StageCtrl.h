@@ -2,14 +2,8 @@
 #define STAGE_CONTROL_H__
 
 //’è”’è‹`
+#define LOAD_ERROR	(-1)
 
-// \‘¢‘ÌéŒ¾
-typedef struct {
-	int x;
-	int y;
-	int img;
-	int inside;
-}T_Stage;
 
 
 // ŠÖ”éŒ¾
