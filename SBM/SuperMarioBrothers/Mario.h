@@ -69,9 +69,9 @@ inline bool isMarioInitSuccess() {
 }
 
 // XVˆ—
-void Update();
+void Mario_Update();
 
 // •`‰æˆ—
-void Draw();
+void Mario_Draw();
 
 const T_MARIO getMarioInfo();

@@ -155,11 +155,13 @@
   <ItemGroup>
     <ClCompile Include="KeyControl.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mario.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="StageControl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KeyControl.h" />
+    <ClInclude Include="Mario.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="StageControl.h" />
     <ClInclude Include="StageControl_Config.h" />

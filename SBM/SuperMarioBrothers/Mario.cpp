@@ -175,7 +175,7 @@ int marioInit() {
 * 引数：	なし
 * 戻り値：	なし
 ******************************************/
-void Update() {
+void Mario_Update() {
 
 	KeyCtrl_Update();
 	
@@ -200,7 +200,7 @@ void Update() {
 * 引数：	なし
 * 戻り値：	なし
 ******************************************/
-void Draw() {
+void Mario_Draw() {
 	// 左右の向き決定
 	updateDirection();
 
