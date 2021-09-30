@@ -1,38 +1,41 @@
 #pragma once
 
-// 画像系定数
-#define MARIO_WIDTH_HEIGHT__ 32	// 画像の幅
-#define MARIO_IMAGE_MAX__ 9		// 画像の分割数
-
+// 画像情報
+#define MARIO_WIDTH_HEIGHT		(32)			// 画像の幅
+#define MARIO_IMAGE_MAX			(9)				// 画像の分割数
 // 画像の添え字
-#define IDOL_IMG__ 0			// 棒立ち
-#define MOVE_IMG_START__ 1		// 最初の移動画像
-#define MOVE_IMG_END__ 3		// 最後の移動画像
-#define TURN_IMG__ 4			// ターン
-#define JUMP_IMG__ 5			// ジャンプ
+#define IDOL_IMG				(0)				// 棒立ち
+#define MOVE_IMG_START			(1)				// 最初の移動画像
+#define MOVE_IMG_END			(3)				// 最後の移動画像
+#define TURN_IMG				(4)				// ターン
+#define JUMP_IMG				(5)				// ジャンプ
 
-// 移動状態を表す定数
-#define IDOL__ 0x00U			// 棒立ち
-#define MOVE__ 0x01U			// 移動
-#define DASH__ 0x02U			// ダッシュ
-#define TURN__ 0x04U			// ターン
-#define JUMP__ 0x08U			// ジャンプ
+// 移動状態を表すフラグ定数
+#define STATE_IDOL				(0b0000U)		// 棒立ち
+#define STATE_MOVE				(0b0001U)		// 移動
+#define STATE_DASH				(0b0010U)		// ダッシュ
+#define STATE_TURN				(0b0100U)		// ターン
+#define STATE_JUMP				(0b1000U)		// ジャンプ
 
 // ステータス
-#define MAX_WALK_SPEED__ 3		// 通常時の最高速度
-#define MAX_DASH_SPEED__ 5		// ダッシュ時の最高速度
-#define JUMP_POWER__ 10			// 通常時のジャンプ力
-#define DASH_JUMP_POWER__ 13	// ダッシュ時のジャンプ力
+#define WALK_ACCELERATION		(0.2f)			// 移動の加速度
+#define MAX_WALK_SPEED			(3.0f)			// 通常時の最高速度
+#define MAX_DASH_SPEED			(5.0f)			// ダッシュ時の最高速度
+#define FRICTION_POWER			(0.2f)			// 摩擦
+#define IDOL_JUMP_POWER			(10.0f)			// 通常時のジャンプ力
+#define DASH_JUMP_POWER			(13.0f)			// ダッシュ時のジャンプ力
+#define GRAVITY_POWER			(1.0f)			// 重力
+#define MAX_FALL_SPEED			(8.0f)			// 落下の最高速度
 
-// 真偽
-#define SUCCESS__ 1	// 成功
-#define ERROR__ -1	// 失敗
+// ゲッター
+#define GET_MAX_SPEED(DASH_FLG) (DASH_FLG ? MAX_DASH_SPEED : MAX_WALK_SPEED)		// 最高速度取得
+#define GET_JUMP_POWER(DASH_FLG) (DASH_FLG ? -IDOL_JUMP_POWER : -DASH_JUMP_POWER)		// ジャンプ力取得
 
 // 方向指定の列挙
 typedef enum {
 	LEFT_DIR = -1,
 	RIGHT_DIR = 1
-}E_MARIO_DIRECTION;
+}E_MARIO_DIR;
 
 // 座標の構造体
 typedef struct {
@@ -42,36 +45,20 @@ typedef struct {
 
 // マリオの構造体
 typedef struct {
+	int images[MARIO_IMAGE_MAX];	// マリオの画像
+	E_MARIO_DIR direction;			// 左右の向き
 	T_COORDINATE oldPosition;		// 1フレーム前の座標
 	T_COORDINATE nowPosition;		// 現在座標
 	T_COORDINATE speed;				// 速度　座標に加算する値
-	T_COORDINATE maxSpeed;			// 最大速度　スピードの上限値
-	T_COORDINATE acc;				// 加速度　スピードに加算する値
-	float jumpPower;				// ジャンプ力
-	
+	unsigned char moveStateFlag;	// 移動状態
+	int animationFreamTime;			// アニメーション用フレームカウント
 	bool isJumpPush;				// ジャンプボタンを押しているかどうか
 	bool isStageClear;				// ステージクリアのフラグ
 	bool isDeath;					// GameOverのフラグ
-
-	unsigned char moveFlag;		// 移動状態
-	E_MARIO_DIRECTION direction;	// 左右の向き
-
-	int animationFreamTime;			// アニメーション用フレームカウント
-	int images[MARIO_IMAGE_MAX__];	// マリオの画像
-
-	
 }T_MARIO;
 
-// 初期化メソッド
-inline bool isMarioInitSuccess() {
-	int marioInit();
-	return (marioInit() == SUCCESS__);
-}
-
-// 更新処理
-void Mario_Update();
-
-// 描画処理
-void Mario_Draw();
-
-const T_MARIO getMarioInfo();
+// プロトタイプ宣言
+bool Mario_Init();					// マリオの初期化
+void Mario_Update();				// マリオの更新処理
+void Mario_Draw();					// マリオの描画処理
+const T_MARIO* getMarioInfo();		// マリオの情報取得
