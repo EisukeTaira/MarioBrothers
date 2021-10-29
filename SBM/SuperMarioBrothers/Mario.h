@@ -37,6 +37,15 @@ typedef enum {
 	RIGHT_DIR = 1
 }E_MARIO_DIR;
 
+// マリオの取得物
+typedef enum {
+	SIZE_UP_MUSH, 
+	LIFE_UP_MUSH,
+	FIRE_FROWER,
+	COIN,
+	ENEMY
+}E_FIELD_ITEM;
+
 // 座標の構造体
 typedef struct {
 	float x;
